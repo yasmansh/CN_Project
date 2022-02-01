@@ -4,9 +4,9 @@ import pickle
 SIGN_UP = "1"
 LOGIN = "2"
 EXIT = "3"
-ACK = "OK"
+ACK = "ACK"
 
-Choqondar_PORT = 8075
+Choqondar_PORT = 8089
 HEADER_LENGTH = 1024
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -15,7 +15,40 @@ print('IP Address:\t' + IP_address)
 server.connect((IP_address, Choqondar_PORT))
 print("Connected to Choqondar Server ... ")
 
-while True:
+
+def client_post_box():
+    global command, msg
+    command = input()  # username2
+    server.send(command.encode())
+    if command == '0':
+        return  # Back to Main Page
+
+    msg = pickle.loads(server.recv(HEADER_LENGTH))  # chat page OR post box
+    if msg[:6] == 'CHATS|':  # chat page(valid username2)
+        print(msg[6:])  # show chats
+        chatting()
+    else:  # post box(invalid username2)
+        print(msg)  # post box(invalid username2)
+        client_post_box()
+
+
+def chatting():
+    global command, msg
+    command = input()  # send pm or shortcut
+    server.send(command.encode())
+    if command == '/exit':
+        msg = pickle.loads(server.recv(HEADER_LENGTH))
+        print(msg)  # post box
+        client_post_box()
+    elif command.find("/load") != -1:
+        msg = pickle.loads(server.recv(HEADER_LENGTH))
+        print(msg)  # show last x pm
+        chatting()
+    elif command.find("/") == -1:  # pm
+        chatting()
+
+
+while True:  # check kon faqat recv and send ... okeye ya na
     try:
         menu = pickle.loads(server.recv(HEADER_LENGTH))
         print(menu)
@@ -33,23 +66,26 @@ while True:
                     print(msg)
                     command = input()
                     server.send(command.encode())
-            continue
-            # back to main page
+            continue  # Back to Main Page
+
 
         elif command == LOGIN:
             msg = pickle.loads(server.recv(HEADER_LENGTH))
             print(msg)
-            command = input()  #username
+            command = input()  # username
             server.send(command.encode())
             msg = pickle.loads(server.recv(HEADER_LENGTH))
             print(msg)
-            command = input() #password
+            command = input()  # password
             server.send(command.encode())
             msg = pickle.loads(server.recv(HEADER_LENGTH))
             print(msg)
-            if msg =='Incorrect username or password.':
-                continue  # back to main page
-            #post box
+            if msg == 'Incorrect username or password.':
+                continue  # Back to Main Page
+            # Login successful
+            # Post Box
+            client_post_box()
+
 
         elif command == EXIT:
             exit()
