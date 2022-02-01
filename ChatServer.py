@@ -98,12 +98,12 @@ def run(client):
 def post_box(client, username):
     rest_of_contacts = list(record_username_password.keys())
     rest_of_contacts.remove(username)
-    chat_contacts = []  # (name , number of new messages)
+    chat_contacts = []  # (name , number of new messages, time_of_last_pm)
     if username in record_all_messages:  # Has at least one chat
         for msg in record_all_messages[username]:
             if msg[0] in rest_of_contacts:  # msg[0] = from username
                 rest_of_contacts.remove(msg[0])
-                chat_contacts.append((msg[0], 0))
+                chat_contacts.append((msg[0], 0, datetime.datetime.min))
 
     for i in range(len(chat_contacts)):  # Updating number of new messages
         last_seen = datetime.datetime.min
@@ -111,9 +111,11 @@ def post_box(client, username):
             last_seen = record_username_chatWith_lastTime[username + "|" + chat_contacts[i][0]]
         for msg in record_all_messages[username]:
             if msg[0] == chat_contacts[i][0] and msg[2] > last_seen:
-                chat_contacts[i] = (chat_contacts[i][0], chat_contacts[i][1] + 1)
+                chat_contacts[i] = (chat_contacts[i][0], chat_contacts[i][1] + 1, chat_contacts[i][2])
+                if msg[2] > chat_contacts[i][2]:
+                    chat_contacts[i] = (chat_contacts[i][0], chat_contacts[i][1], msg[2])
 
-    chat_contacts.sort(key=lambda x: x[1], reverse=True)
+    chat_contacts.sort(key=lambda x: x[2], reverse=True)
     rest_of_contacts.sort()
     contacts = ''
     for chat_contact in chat_contacts:
