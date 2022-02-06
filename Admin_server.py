@@ -37,9 +37,12 @@ class Firewall():
     def update(self, mode) :
         self.state = mode
         self.port_list = []
-    def add_port(port) :
+    def add_port(self, port) :
 
         self.port_list.append(port)
+
+    def drop_port(self, port):
+        self.port_list = sel.port_list.remove(port)
 
 
 def run(client):
@@ -88,5 +91,21 @@ def run(client):
                         firewall.update(True)
                     elif command == 'black':
                         firewall.update(False)
+                    elif command.split(' ')[0] == 'open' :
+                        if firewall.state :
+
+                            firewall.add_port(int(command.split(' ')[1]))
+                        else :
+                            firewall.drop_port(int(command.split(' ')[1]))
+                    elif command.split(' ')[0] == 'close' :
+                        if firewall.state :
+
+                            firewall.drop_port(int(command.split(' ')[1]))
+                        else :
+                            firewall.add_port(int(command.split(' ')[1]))
                     else :
-                        firewall.add_port(int(command))
+                        data = pickle.dumps('NACK')
+                        client.send(data)
+                        break
+                    data = pickle.dumps('ACK')
+                    client.send(data)

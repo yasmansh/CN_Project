@@ -1,19 +1,82 @@
 import socket
 import pickle
 
+
+
 SIGN_UP = "1"
 LOGIN = "2"
 EXIT = "3"
 ACK = "ACK"
 
+
+CHOQONDAR = "choqondar"
+SHALQAM = "shalqam"
+ADMIN_PASSWORD = "0"
+ACTIVATE_BLACK_FIREWALL = 'black'
+ACTIVATE_WHITE_FIREWALL = 'white'
+
+ADMIN_PORT = 8088
 Choqondar_PORT = 8089
+Shalqam_PORT = 8090
 HEADER_LENGTH = 1024
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 IP_address = 'localhost'
 print('IP Address:\t' + IP_address)
-server.connect((IP_address, Choqondar_PORT))
-print("Connected to Choqondar Server ... ")
+server.connect((IP_address, Admin_PORT))
+print("Connected to Admin Server ... ")
+
+while True :
+    try:
+
+        msg = pickle.loads(server.recv(HEADER_LENGTH))
+        print(msg) # asking for admin or user
+        command = input()
+        server.send(command.encode())
+        msg = pickle.loads(server.recv(HEADER_LENGTH))
+        print(msg)
+        if msg == 'which server?':
+            command = input()
+
+            if command == CHOQONDAR :
+                command = command+ ' ' + str(Choqondar_PORT)
+                server.send(command.encode())
+                msg = pickle.loads(server.recv(HEADER_LENGTH))
+                if msg = 'ACK' :
+                    server.close()
+                    server.connect((IP_address, Choqondar_PORT))
+                    print("Connected to Choqondar Server ... ")
+                else  :
+                    continue
+
+
+            elif command == SHALQAM :
+                command = command+ ' ' + str(Shalqam_PORT)
+                server.send(command.encode())
+                msg = pickle.loads(server.recv(HEADER_LENGTH))
+                if msg = 'ACK' :
+                    server.close()
+                    server.connect((IP_address, Shalqam_PORT))
+                    print("Connected to Shalqam Server ... ")
+                else  :
+                    continue
+
+        if msg == 'password' :
+            print('please insert your password')
+            command = input()
+            server.send(command.encode())
+            msg = pickle.loads(server.recv(HEADER_LENGTH))
+            print(msg)
+
+            if msg == 'Admin logged in' :
+                command = input()
+                while True :
+                    server.send(command.encode())
+                    msg = pickle.loads(server.recv(HEADER_LENGTH))
+                    print(msg)
+                    if msg == 'NACK' :
+
+                        break
 
 
 def client_post_box():
