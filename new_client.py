@@ -3,9 +3,9 @@ import socket
 
 def handle_s(server,ans) :
 
-    if ans == choqondar :
+    if ans == 'choqondar' :
         pass
-    elif ans == shalqam :
+    elif ans == 'shalqam' :
         pass
     pass
 
