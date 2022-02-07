@@ -23,7 +23,7 @@ HEADER_LENGTH = 1024
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 IP_address = 'localhost'
 print('IP Address:\t' + IP_address)
-server.connect((IP_address, Admin_PORT))
+server.connect((IP_address, ADMIN_PORT))
 print("Connected to Admin Server ... ")
 
 while True :
@@ -42,7 +42,7 @@ while True :
                 command = command+ ' ' + str(Choqondar_PORT)
                 server.send(command.encode())
                 msg = pickle.loads(server.recv(HEADER_LENGTH))
-                if msg = 'ACK' :
+                if msg == ACK :
                     server.close()
                     server.connect((IP_address, Choqondar_PORT))
                     print("Connected to Choqondar Server ... ")
@@ -54,7 +54,7 @@ while True :
                 command = command+ ' ' + str(Shalqam_PORT)
                 server.send(command.encode())
                 msg = pickle.loads(server.recv(HEADER_LENGTH))
-                if msg = 'ACK' :
+                if msg == ACK :
                     server.close()
                     server.connect((IP_address, Shalqam_PORT))
                     print("Connected to Shalqam Server ... ")
@@ -77,6 +77,10 @@ while True :
                     if msg == 'NACK' :
 
                         break
+    except Exception as e:
+        #error
+        break
+
 
 
 def client_post_box():
