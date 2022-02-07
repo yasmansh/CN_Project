@@ -133,6 +133,22 @@ def Main():
                 break
             if str(data.decode('ascii')) == 'NACK':
                 print('server not available')
+         if str(data.decode('ascii')) == 'password' :
+            print('please insert your password')
+            command = input()
+            s.send(command.encode('ascii'))
+            data = s.recv(1024)
+            print('Received from the server :',str(data.decode('ascii')))
+
+            if str(data.decode('ascii')) == 'Admin logged in' :
+                
+                while True :
+                    command = input()
+                    s.send(command.encode('ascii'))
+                    data = s.recv(1024)
+                    print('Received from the server :',str(data.decode('ascii')))
+                    if str(data.decode('ascii')) == 'NACK' :
+                        break
 
     s.close()
 
