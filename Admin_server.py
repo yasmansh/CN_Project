@@ -18,10 +18,6 @@ class Client:
         clients_list.append(self)
         print(f"{client_address} connected to Admin server")
 
-    def kill_session(self):
-        global clients_list
-        clients_list.remove(self)
-
     def send(self, data):
         self.socket.send(data)
 
@@ -42,7 +38,7 @@ class Firewall():
         self.port_list.append(port)
 
     def drop_port(self, port):
-        self.port_list = sel.port_list.remove(port)
+        self.port_list = self.port_list.remove(port)
 
 
 def run(client):

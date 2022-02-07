@@ -3,15 +3,16 @@ import pickle
 import datetime
 from _thread import start_new_thread
 
+import new_client
+
 SIGN_UP = "1"
 LOGIN = "2"
 EXIT = "3"
 ACK = "ACK"
 NACK = "NACK"
 HEADER_LENGTH = 1024
-clients_list = []
 record_username_password = {}
-record_all_messages = {}  # {'yasaman':[('yasaman','salam',2) , ('p','khubi?',4)] , 'p':[('yasaman','merci',3)]}
+record_all_messages = {}
 # {'username': [('from_username', 'pm', datetime]}
 
 
@@ -21,16 +22,11 @@ record_username_chatWith_lastTime = {}  # { 'username1|'username2' :datetime } -
 class Client:
 
     def __init__(self, client_address, client_socket):
-        global clients_list
         self.socket = client_socket
         self.address = client_address
         self.messages = []
-        clients_list.append(self)
         print(f"{client_address} connected to Choqondar")
 
-    def kill_session(self):
-        global clients_list
-        clients_list.remove(self)
 
     def send(self, data):
         self.socket.send(data)
@@ -40,7 +36,6 @@ class Client:
 
 
 def run(client):
-    global clients_list
 
     while True:
 
@@ -89,7 +84,7 @@ def run(client):
 
         elif command == EXIT:
             print(str(client_address) + " disconnected.")
-            client.kill_session()
+            new_client.Main()
             break
         else:
             print("Not understand")
@@ -195,7 +190,7 @@ def load_x(username, username2, x):
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # TCP Server
 IP_address = 'localhost'
-Port = '8089'
+Port = '8080'
 print("\33[32m \t\t\t\tChoqondar Server\33[0m")
 server.bind((IP_address, int(Port)))
 server.listen(20)

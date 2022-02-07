@@ -2,7 +2,7 @@ import socket
 from _thread import *
 import threading
 
-ch_port = 8089
+ch_port = 8080
 sh_port = 9090
 
 
@@ -22,7 +22,7 @@ class Firewall():
         self.port_list.append(port)
 
     def drop_port(self, port):
-        self.port_list = sel.port_list.remove(port)
+        self.port_list = self.port_list.remove(port)
 
 
 CONNECT_TO_EXTERNAL_SERVER = "server"
@@ -35,7 +35,7 @@ def threaded(c):
     while True:
         command = c.recv(1024)
         print(str(command.decode('ascii')))
-        c.send('menu:\n *Connect to external server \n *login as admin'.encode('ascii'))
+        c.send('menu:\n *Connect to external servers \n *login as admin'.encode('ascii'))
         command = str(c.recv(1024).decode('ascii'))
         print(command)
         if command == CONNECT_TO_EXTERNAL_SERVER:
@@ -80,7 +80,7 @@ def threaded(c):
 
 def Main():
     host = ""
-    port = 12345
+    port = 1234
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((host, port))
     print("socket binded to port", port)

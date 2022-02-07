@@ -1,7 +1,6 @@
 import socket
 import pickle
 
-
 SIGN_UP = "1"
 LOGIN = "2"
 EXIT = "3"
@@ -34,6 +33,7 @@ def client_post_box(server):
         print(msg)  # post box(invalid username2)
         client_post_box(server)
 
+
 def chatting(server):
     global command, msg
     command = input()  # send pm or shortcut
@@ -48,6 +48,7 @@ def chatting(server):
         chatting(server)
     elif command.find("/") == -1:  # pm
         chatting(server)
+
 
 def handle_s(server, ans):
     if ans == 'choqondar':
@@ -106,7 +107,7 @@ def handle_s(server, ans):
 def Main():
     # local host IP '127.0.0.1'
     host = '127.0.0.1'
-    port = 12345
+    port = 1234
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((host, port))
