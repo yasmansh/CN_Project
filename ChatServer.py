@@ -49,7 +49,7 @@ def run(client):
 
         command = client.recv()
 
-        if not command:  ##check she baz
+        if not command:
             client.kill_session()
             print("Client closed connection.")
             break
@@ -114,7 +114,6 @@ def post_box(client, username):
                 chat_contacts[i] = (chat_contacts[i][0], chat_contacts[i][1] + 1, chat_contacts[i][2])
             if msg[0] == chat_contacts[i][0] and msg[2] > chat_contacts[i][2]:
                 chat_contacts[i] = (chat_contacts[i][0], chat_contacts[i][1], msg[2])
-   
 
     chat_contacts.sort(key=lambda x: x[2], reverse=True)
     rest_of_contacts.sort()
