@@ -22,7 +22,7 @@ class Firewall():
         self.port_list.append(port)
 
     def drop_port(self, port):
-        self.port_list = sel.port_list.remove(port)
+        self.port_list = self.port_list.remove(port)
 
 
 CONNECT_TO_EXTERNAL_SERVER = "server"
