@@ -27,7 +27,6 @@ class Client:
         self.messages = []
         print(f"{client_address} connected to Choqondar")
 
-
     def send(self, data):
         self.socket.send(data)
 
@@ -36,7 +35,6 @@ class Client:
 
 
 def run(client):
-
     while True:
 
         data = pickle.dumps('1. Sign Up\n2. Login\n3. Exit')
@@ -190,7 +188,7 @@ def load_x(username, username2, x):
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # TCP Server
 IP_address = 'localhost'
-Port = '8080'
+Port = '8089'
 print("\33[32m \t\t\t\tChoqondar Server\33[0m")
 server.bind((IP_address, int(Port)))
 server.listen(20)

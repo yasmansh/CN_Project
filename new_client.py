@@ -107,7 +107,7 @@ def handle_s(server, ans):
 def Main():
     # local host IP '127.0.0.1'
     host = '127.0.0.1'
-    port = 1234
+    port = 12345
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((host, port))
@@ -133,21 +133,21 @@ def Main():
                 break
             if str(data.decode('ascii')) == 'NACK':
                 print('server not available')
-         if str(data.decode('ascii')) == 'password' :
+        if str(data.decode('ascii')) == 'password':
             print('please insert your password')
             command = input()
             s.send(command.encode('ascii'))
             data = s.recv(1024)
-            print('Received from the server :',str(data.decode('ascii')))
+            print('Received from the server :', str(data.decode('ascii')))
 
-            if str(data.decode('ascii')) == 'Admin logged in' :
-                
-                while True :
+            if str(data.decode('ascii')) == 'Admin logged in':
+
+                while True:
                     command = input()
                     s.send(command.encode('ascii'))
                     data = s.recv(1024)
-                    print('Received from the server :',str(data.decode('ascii')))
-                    if str(data.decode('ascii')) == 'NACK' :
+                    print('Received from the server :', str(data.decode('ascii')))
+                    if str(data.decode('ascii')) == 'NACK':
                         break
 
     s.close()
